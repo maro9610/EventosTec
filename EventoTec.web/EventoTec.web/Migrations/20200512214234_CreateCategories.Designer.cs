@@ -4,14 +4,16 @@ using EventoTec.web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventoTec.web.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    partial class DataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200512214234_CreateCategories")]
+    partial class CreateCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,8 +95,6 @@ namespace EventoTec.web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoryId");
-
                     b.Property<int>("CityId");
 
                     b.Property<string>("Descripcion");
@@ -113,8 +113,6 @@ namespace EventoTec.web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("CityId");
 
                     b.ToTable("Events");
@@ -122,11 +120,6 @@ namespace EventoTec.web.Migrations
 
             modelBuilder.Entity("EventoTec.web.Models.entities.Event", b =>
                 {
-                    b.HasOne("EventoTec.web.Models.entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("EventoTec.web.Models.entities.City", "City")
                         .WithMany()
                         .HasForeignKey("CityId")
