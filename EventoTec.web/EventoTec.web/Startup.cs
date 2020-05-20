@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using EventoTec.web.Data;
 using EventoTec.web.Data.Helpers;
 using EventoTec.web.Models;
+using EventoTec.web.Models.entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +36,16 @@ namespace EventoTec.web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddIdentity<User, IdentityRole>(
+                cfg => {
+                    cfg.User.RequireUniqueEmail = true;
+                    cfg.Password.RequireDigit = false;
+                    cfg.Password.RequiredUniqueChars = 0;
+                    cfg.Password.RequireLowercase = false;
+                    cfg.Password.RequireNonAlphanumeric = false;
+                    cfg.Password.RequireUppercase = false;
+                }).AddEntityFrameworkStores<DataDbContext>();
 
             //Linea agregada de la tarea
             services.AddScoped<IUserHelper, UserHelper>();
@@ -65,6 +77,7 @@ namespace EventoTec.web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>
