@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventoTec.web.Data;
+using EventoTec.web.Data.Helpers;
 using EventoTec.web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,14 +35,20 @@ namespace EventoTec.web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            //Linea agregada de la tarea
+            services.AddScoped<IUserHelper, UserHelper>();
+            services.AddTransient<SeedDb>();
+
             services.AddDbContext<DataDbContext>(cfg =>
             {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

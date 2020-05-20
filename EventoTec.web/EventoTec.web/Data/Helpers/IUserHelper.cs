@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EventoTec.web.Data.Helpers
 {
-    interface IUserHelper
+    public interface IUserHelper
     {
         Task<User> GetUserByEMailAsync(string email);
         Task<IdentityResult> AddUserAssync(User User, string Password);
