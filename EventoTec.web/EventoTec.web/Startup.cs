@@ -37,6 +37,8 @@ namespace EventoTec.web
 
             //Linea agregada de la tarea
             services.AddScoped<IUserHelper, UserHelper>();
+
+
             services.AddTransient<SeedDb>();
 
             services.AddDbContext<DataDbContext>(cfg =>
@@ -44,10 +46,7 @@ namespace EventoTec.web
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             
         }
 
