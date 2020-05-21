@@ -7,28 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EventoTec.web.Models;
 using EventoTec.web.Models.entities;
-using Microsoft.AspNetCore.Authorization;
 
 namespace EventoTec.web.Controllers
 {
-    [Authorize]
-    public class EventsController : Controller
+    public class ClientsController : Controller
     {
         private readonly DataDbContext _context;
 
-        public EventsController(DataDbContext context)
+        public ClientsController(DataDbContext context)
         {
             _context = context;
         }
 
-        // GET: Events
+        // GET: Clients
         public async Task<IActionResult> Index()
         {
-            var dataDbContext = _context.Events.Include(a => a.Category).Include(a => a.City);
-            return View(await dataDbContext.ToListAsync());
+            return View(await _context.Clients.ToListAsync());
         }
 
-        // GET: Events/Details/5
+        // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,45 +33,39 @@ namespace EventoTec.web.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Events
-                .Include(a => a.Category)
-                .Include(a => a.City)
+            var client = await _context.Clients
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
+            if (client == null)
             {
                 return NotFound();
             }
 
-            return View(@event);
+            return View(client);
         }
 
-        // GET: Events/Create
+        // GET: Clients/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
-            ViewData["CityId"] = new SelectList(_context.City, "id", "Name");
             return View();
         }
 
-        // POST: Events/Create
+        // POST: Clients/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,EventDate,Descripcion,Picture,People,Duretion,CityId,CategoryId")] Event @event)
+        public async Task<IActionResult> Create([Bind("Id,Address")] Client client)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@event);
+                _context.Add(client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", @event.CategoryId);
-            ViewData["CityId"] = new SelectList(_context.City, "id", "Name", @event.CityId);
-            return View(@event);
+            return View(client);
         }
 
-        // GET: Events/Edit/5
+        // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,24 +73,22 @@ namespace EventoTec.web.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Events.FindAsync(id);
-            if (@event == null)
+            var client = await _context.Clients.FindAsync(id);
+            if (client == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Description", @event.CategoryId);
-            ViewData["CityId"] = new SelectList(_context.City, "id", "Descripcion", @event.CityId);
-            return View(@event);
+            return View(client);
         }
 
-        // POST: Events/Edit/5
+        // POST: Clients/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,EventDate,Descripcion,Picture,People,Duretion,CityId,CategoryId")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Address")] Client client)
         {
-            if (id != @event.Id)
+            if (id != client.Id)
             {
                 return NotFound();
             }
@@ -108,12 +97,12 @@ namespace EventoTec.web.Controllers
             {
                 try
                 {
-                    _context.Update(@event);
+                    _context.Update(client);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventExists(@event.Id))
+                    if (!ClientExists(client.Id))
                     {
                         return NotFound();
                     }
@@ -124,12 +113,10 @@ namespace EventoTec.web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Description", @event.CategoryId);
-            ViewData["CityId"] = new SelectList(_context.City, "id", "Descripcion", @event.CityId);
-            return View(@event);
+            return View(client);
         }
 
-        // GET: Events/Delete/5
+        // GET: Clients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,32 +124,30 @@ namespace EventoTec.web.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Events
-                .Include(a => a.Category)
-                .Include(a => a.City)
+            var client = await _context.Clients
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
+            if (client == null)
             {
                 return NotFound();
             }
 
-            return View(@event);
+            return View(client);
         }
 
-        // POST: Events/Delete/5
+        // POST: Clients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @event = await _context.Events.FindAsync(id);
-            _context.Events.Remove(@event);
+            var client = await _context.Clients.FindAsync(id);
+            _context.Clients.Remove(client);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EventExists(int id)
+        private bool ClientExists(int id)
         {
-            return _context.Events.Any(e => e.Id == id);
+            return _context.Clients.Any(e => e.Id == id);
         }
     }
 }

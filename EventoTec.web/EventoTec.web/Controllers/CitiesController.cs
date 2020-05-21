@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EventoTec.web.Models;
 using EventoTec.web.Models.entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EventoTec.web.Controllers
 {
+    [Authorize]
+
     public class CitiesController : Controller
     {
         private readonly DataDbContext _context;

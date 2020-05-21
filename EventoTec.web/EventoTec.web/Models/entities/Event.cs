@@ -12,7 +12,7 @@ namespace EventoTec.web.Models.entities
 
         public int Id { get; set; }
         [Required]
-        [Display(Name="Nombre")]
+        [Display(Name = "Nombre")]
         public string Name { get; set; }
         [Required]
         [Display(Name = "Fecha del Evento")]
@@ -31,10 +31,15 @@ namespace EventoTec.web.Models.entities
         public int Duretion { get; set; }
         [Required]
         public int CityId { get; set; }
-       [ForeignKey ("CityId")]
+        [ForeignKey("CityId")]
 
         public City City { get; set; }
         [Required]
+        public int ClientId { get; set; }
+        [ForeignKey("ClientId")]
+
+        public Client Client { get; set; }
+
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }

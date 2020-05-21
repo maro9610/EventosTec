@@ -20,5 +20,9 @@ namespace EventoTec.web.Models.entities
         [Display (Name ="Pais")]
 
         public string Slung { get; set; }
+
+        public ICollection<Event> Events { get; set;}
+
+
     }
 }

@@ -19,5 +19,7 @@ namespace EventoTec.web.Models.entities
         [Display(Name = "Descripcion")]
 
         public string Description { get; set; }
+
+        public ICollection<Event> Events { get; set;}
     }
 }
