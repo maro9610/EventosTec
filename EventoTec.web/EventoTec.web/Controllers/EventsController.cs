@@ -24,7 +24,7 @@ namespace EventoTec.web.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            var dataDbContext = _context.Events.Include(a => a.Category).Include(a => a.City);
+            var dataDbContext = _context.Events.Include(a => a.City);
             return View(await dataDbContext.ToListAsync());
         }
 
@@ -37,7 +37,6 @@ namespace EventoTec.web.Controllers
             }
 
             var @event = await _context.Events
-                .Include(a => a.Category)
                 .Include(a => a.City)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)

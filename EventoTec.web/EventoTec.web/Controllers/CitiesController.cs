@@ -25,7 +25,8 @@ namespace EventoTec.web.Controllers
         // GET: Cities
         public async Task<IActionResult> Index()
         {
-            return View(await _context.City.ToListAsync());
+            var cities = await _context.City.Include(a => a.Events).ToListAsync();
+            return View(cities);
         }
 
         // GET: Cities/Details/5
@@ -36,7 +37,7 @@ namespace EventoTec.web.Controllers
                 return NotFound();
             }
 
-            var city = await _context.City
+            var city = await _context.City.Include(a => a.Events)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (city == null)
             {
