@@ -5,11 +5,12 @@
     Layout = "CLients";
 }
 
-<h2>Delete</h2>
+<h2>Borrar</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Seguro que deseas borrar?</h3>
+
 <div>
-    <h4>Client</h4>
+    <h4>Borrar Cliente</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -22,7 +23,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Borrar" class="btn btn-default" /> |
+        <a asp-action="Index">Regresar a la Lista</a>
     </form>
 </div>
