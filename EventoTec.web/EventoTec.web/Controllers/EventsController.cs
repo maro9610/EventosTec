@@ -24,7 +24,7 @@ namespace EventoTec.web.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            var dataDbContext = _context.Events.Include(a => a.City);
+            var dataDbContext = _context.Events.Include(a => a.City).Include(a=> a.Category);
             return View(await dataDbContext.ToListAsync());
         }
 
@@ -54,7 +54,7 @@ namespace EventoTec.web.Controllers
             var userid = _context.Clients.Where(a => a.User.Email == username).FirstOrDefault();
             ViewBag.ClientId = userid.Id;
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
-            ViewData["CityId"] = new SelectList(_context.City, "id", "Name");
+            ViewData["Cityid"] = new SelectList(_context.City, "id", "Name");
             return View();
         }
 
@@ -63,7 +63,7 @@ namespace EventoTec.web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,EventDate,Descripcion,Picture,People,Duretion,CityId,CategoryId")] Event @event)
+        public async Task<IActionResult> Create( Event @event)
         {
             if (ModelState.IsValid)
             {
