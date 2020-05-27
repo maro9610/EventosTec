@@ -54,7 +54,32 @@ namespace EventoTec.web.Controllers
             var userid = _context.Clients.Where(a => a.User.Email == username).FirstOrDefault();
             ViewBag.ClientId = userid.Id;
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
-            ViewData["Cityid"] = new SelectList(_context.City, "id", "Name");
+            ViewData["CityId"] = new SelectList(_context.City, "id", "Name");
+            return View();
+        }
+
+        //Codigo agregado de la tarea T09
+        public IActionResult CreateEvent()
+        {
+            ViewBag.ClientId = _context.Clients.Include(u => u.User).ToList();
+            ViewData["CityId"] = new SelectList(_context.City, "id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateEvent(Event @event)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(@event);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.ClientId = _context.Clients.Include(u => u.User).ToList();
+            ViewData["CityId"] = new SelectList(_context.City, "id", "Name", @event.CityId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", @event.CategoryId);
             return View();
         }
 
