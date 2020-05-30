@@ -9,6 +9,7 @@ namespace EventoTec.web.Models.entities
 {
     public class Event
     {
+        internal IEnumerable<object> city;
 
         public int Id { get; set; }
         [Required]

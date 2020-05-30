@@ -17,5 +17,4 @@ namespace EventoTec.web.Models.entities
 
         public ICollection<Event> Events { get; set; }
     }
-
 }

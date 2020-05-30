@@ -13,40 +13,39 @@ namespace EventoTec.web.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class ClientsController : ControllerBase
     {
         private readonly DataDbContext _context;
 
-        public CategoriesController(DataDbContext context)
+        public ClientsController(DataDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Categories
+        // GET: api/Clients
         [HttpGet]
-        public IEnumerable<Category> GetCategory()
+        public IEnumerable<Client> GetClients()
         {
-            return _context.Category;
+            return _context.Clients;
         }
 
-        // GET: api/Categories/5
+        // GET: api/Clients/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategory([FromRoute] int id)
+        public async Task<IActionResult> GetClient([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var category = await _context.Category.Include(a => a.Events)
+            var client = await _context.Clients.Include(a => a.Events)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
-            var response = new CategoryResponse
+            var response = new ClientResponse
             {
-                Description = category.Description,
-                Name = category.Name,
-                Id = category.Id,
-                Events = category.Events.Select(p => new EventResponse
+                Address = client.Address,
+                Id = client.Id,
+                Events = client.Events.Select(p => new EventResponse
                 {
                     Id = p.Id,
                     Name = p.Name,
@@ -57,7 +56,7 @@ namespace EventoTec.web.Controllers.API
                 }).ToList(),
             };
 
-            if (category == null)
+            if (client == null)
             {
                 return NotFound();
             }
@@ -65,21 +64,21 @@ namespace EventoTec.web.Controllers.API
             return Ok(response);
         }
 
-        // PUT: api/Categories/5
+        // PUT: api/Clients/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory([FromRoute] int id, [FromBody] Category category)
+        public async Task<IActionResult> PutClient([FromRoute] int id, [FromBody] Client client)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != category.Id)
+            if (id != client.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(category).State = EntityState.Modified;
+            _context.Entry(client).State = EntityState.Modified;
 
             try
             {
@@ -87,7 +86,7 @@ namespace EventoTec.web.Controllers.API
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CategoryExists(id))
+                if (!ClientExists(id))
                 {
                     return NotFound();
                 }
@@ -100,45 +99,45 @@ namespace EventoTec.web.Controllers.API
             return NoContent();
         }
 
-        // POST: api/Categories
+        // POST: api/Clients
         [HttpPost]
-        public async Task<IActionResult> PostCategory([FromBody] Category category)
+        public async Task<IActionResult> PostClient([FromBody] Client client)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Category.Add(category);
+            _context.Clients.Add(client);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+            return CreatedAtAction("GetClient", new { id = client.Id }, client);
         }
 
-        // DELETE: api/Categories/5
+        // DELETE: api/Clients/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory([FromRoute] int id)
+        public async Task<IActionResult> DeleteClient([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var category = await _context.Category.FindAsync(id);
-            if (category == null)
+            var client = await _context.Clients.FindAsync(id);
+            if (client == null)
             {
                 return NotFound();
             }
 
-            _context.Category.Remove(category);
+            _context.Clients.Remove(client);
             await _context.SaveChangesAsync();
 
-            return Ok(category);
+            return Ok(client);
         }
 
-        private bool CategoryExists(int id)
+        private bool ClientExists(int id)
         {
-            return _context.Category.Any(e => e.Id == id);
+            return _context.Clients.Any(e => e.Id == id);
         }
     }
 }
