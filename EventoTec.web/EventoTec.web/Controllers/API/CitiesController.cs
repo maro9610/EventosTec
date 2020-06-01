@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using EventoTec.web.Models;
 using EventoTec.web.Models.entities;
 using EventoTec.web.Models.ModelApi;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace EventoTec.web.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CitiesController : ControllerBase
     {
         private readonly DataDbContext _context;
